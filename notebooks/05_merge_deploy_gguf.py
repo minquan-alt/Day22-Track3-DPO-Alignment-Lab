@@ -67,8 +67,15 @@ if tokenizer.pad_token is None:
 
 # Stack SFT-mini → DPO adapters
 SFT_PATH = REPO_ROOT / "adapters" / "sft-mini"
+DPO_PATH = REPO_ROOT / "adapters" / "dpo"
+
 model = PeftModel.from_pretrained(model, str(SFT_PATH))
 print(f"Loaded SFT-mini adapter from {SFT_PATH}")
+
+# Load DPO adapter on top of SFT
+model.load_adapter(str(DPO_PATH), adapter_name="dpo")
+model.set_adapter("dpo")
+print(f"Loaded DPO adapter from {DPO_PATH}")
 
 # %% [markdown]
 # > **Note:** The DPO adapter trained in NB3 stacks on top of SFT. To get a fully
